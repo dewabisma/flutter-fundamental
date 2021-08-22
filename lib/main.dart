@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 main() {
   runApp(MyApp());
@@ -19,7 +20,7 @@ class _MyAppState extends State<MyApp> {
 
   var _questions = ['What is your name?', 'What is your pet name?'];
 
-  void printAnswer() {
+  void _printAnswer() {
     setState(() {
       _questionIndex = (_questionIndex + 1) % _questions.length;
     });
@@ -36,18 +37,9 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: <Widget>[
             Question(_questions[_questionIndex]),
-            RaisedButton(
-              onPressed: printAnswer,
-              child: Text('Answer 1'),
-            ),
-            RaisedButton(
-              onPressed: printAnswer,
-              child: Text('Answer 2'),
-            ),
-            RaisedButton(
-              onPressed: printAnswer,
-              child: Text('Answer 3'),
-            ),
+            Answer(_printAnswer, 'Answer 1'),
+            Answer(_printAnswer, 'Answer 2'),
+            Answer(_printAnswer, 'Answer 3'),
           ],
         ),
       ),
