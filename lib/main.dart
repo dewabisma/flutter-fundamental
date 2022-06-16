@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import './question.dart';
 import './answer.dart';
 
-main() {
+void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
@@ -18,17 +17,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
-  var _questions = ['What is your name?', 'What is your pet name?'];
-
-  void _printAnswer() {
+  void _pickAnswer() {
     setState(() {
-      _questionIndex = (_questionIndex + 1) % _questions.length;
+      _questionIndex++;
     });
-    print('Answer chosen');
+
+    print(_questionIndex);
+    print("Answer is Chosen");
   }
 
   @override
   Widget build(BuildContext context) {
+    const _questions = [
+      {
+        "question": "siapa namamu?",
+        "answer": ["wayan", "gede", "nyoman"]
+      },
+      {
+        "question": "berapa usiamu?",
+        "answer": ["20", "22", "23", "24"]
+      },
+      {
+        "question": "kamu gila?",
+        "answer": ["mungkin", "iya", "tidak", "bisa jadi  "]
+      },
+    ];
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -36,10 +50,10 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            Question(_questions[_questionIndex]),
-            Answer(_printAnswer, 'Answer 1'),
-            Answer(_printAnswer, 'Answer 2'),
-            Answer(_printAnswer, 'Answer 3'),
+            Question(_questions[_questionIndex]['question'] as String),
+            ...(_questions[_questionIndex]['answer'] as List<String>)
+                .map((jawaban) => Answer(_pickAnswer, jawaban))
+                .toList()
           ],
         ),
       ),
