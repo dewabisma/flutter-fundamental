@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './result.dart';
+import './quiz.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,47 +15,65 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
+  static final _questions = const [
+    {
+      "question": "siapa namamu?",
+      "answer": [
+        {"options": "wayan", "scores": 2},
+        {"options": "gede", "scores": 8},
+        {"options": "putu", "scores": 5}
+      ]
+    },
+    {
+      "question": "berapa usiamu?",
+      "answer": [
+        {"options": "22", "scores": 2},
+        {"options": "23", "scores": 8},
+        {"options": "19", "scores": 5},
+        {"options": "17", "scores": 10}
+      ]
+    },
+    {
+      "question": "kamu gila?",
+      "answer": [
+        {"options": "iya", "scores": 2},
+        {"options": "mungkin", "scores": 8},
+        {"options": "bisa jadi", "scores": 5},
+        {"options": "tidak", "scores": 10}
+      ]
+    },
+  ];
 
-  void _pickAnswer() {
+  var _questionIndex = 0;
+  var _score = 0;
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+    });
+  }
+
+  void _pickAnswer(int questionScore) {
     setState(() {
       _questionIndex++;
     });
 
+    _score += questionScore;
+    print(_score);
     print(_questionIndex);
-    print("Answer is Chosen");
+    print(_questions.length);
   }
 
   @override
   Widget build(BuildContext context) {
-    const _questions = [
-      {
-        "question": "siapa namamu?",
-        "answer": ["wayan", "gede", "nyoman"]
-      },
-      {
-        "question": "berapa usiamu?",
-        "answer": ["20", "22", "23", "24"]
-      },
-      {
-        "question": "kamu gila?",
-        "answer": ["mungkin", "iya", "tidak", "bisa jadi  "]
-      },
-    ];
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(_questions[_questionIndex]['question'] as String),
-            ...(_questions[_questionIndex]['answer'] as List<String>)
-                .map((jawaban) => Answer(_pickAnswer, jawaban))
-                .toList()
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(_questions, _questionIndex, _pickAnswer)
+            : Result(_score, _resetQuiz),
       ),
     );
   }
